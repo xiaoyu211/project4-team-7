@@ -1,13 +1,17 @@
+import os
 from pyspark.mllib.recommendation import ALS
 
-rate_rdd = sc.textFile('/Users/ruixiongshi/Scripts/project4/data_50_10.csv’)
+datasets_path = os.path.join('..', 'Scripts')
+ratings_file = os.path.join(datasets_path, 'project4', 'data_50_10.csv')
+rate_rdd = sc.textFile(ratings_file)
 
 rate_rdd_header = rate_rdd.take(1)[0]
 
-rate_data_rdd = rate_rdd.filter(lambda line: line!=rate_rdd_header).map(lambda line: line.split(",")).map(lambda tokens: (tokens[5],tokens[6],tokens[4])).cache()
+rate_data_rdd = rate_rdd.filter(lambda line: line!=rate_rdd_header)\
+	.map(lambda line: line.split(",")).map(lambda tokens: (tokens[5],tokens[6],tokens[4])).cache()
 
-rate_rdd.first()
-rate_rdd.take(5)
+rate_data_rdd.first()
+rate_data_rdd.take(5)
 
 
 #####################################cross-validation to find best rank value###########################################
@@ -53,7 +57,8 @@ complete_rate_data_rdd = rate_rdd.filter(lambda line: line!=rate_rdd_header).map
 print "There are %s recommendations in the complete dataset" % (complete_rate_data_rdd.count())
 
 
-complete_movies_raw_data = sc.textFile('/Users/ruixiongshi/Scripts/project4/movie.csv’)
+movie_file = os.path.join('datasets_path', 'project4', 'movie.csv')
+complete_movies_raw_data = sc.textFile(movie_file)
 complete_movies_raw_data_header = complete_movies_raw_data.take(1)[0]
 
 #### int(tokens[0]),tokens[1],tokens[2] stands for index, product_id, movie_id change it when all names are available
@@ -131,4 +136,26 @@ top_movies = new_user_recommendations_rating_title_and_count_RDD.filter(lambda r
 
 print ('TOP recommended movies (with more than 25 reviews):\n%s' %
         '\n'.join(map(str, top_movies)))
+
+
+
+
+
+
+
+
+
+
+./sbin/start-master.sh
+./sbin/start-slave.sh
+
+
+~/spark-1.6.1/bin/spark-submit --master spark://HAINAJIANGs-MacBook-Pro.local:7077 --total-executor-cores 14 --executor-memory 6g server.py
+
+curl --data-binary @user_ratings.file http://localhost:8080/0/ratings
+
+http://0.0.0.0:5431/10/ratings/top/25
+
+
+
 
