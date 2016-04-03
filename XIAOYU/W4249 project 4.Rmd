@@ -1,0 +1,206 @@
+
+#project 4
+```{r}
+# #combine dataset
+# movie <- read.csv("~/Desktop/movie.csv")
+# movie2 <- read.csv("~/Desktop/movie963_10000.csv")
+# movie1 <- movie[1:963,]
+# movie0_10000 <- rbind(movie1,movie2)
+# movie3 <- read.csv("~/Desktop/movie10000_20000.csv")
+# movie0_20000 <- rbind(movie0_10000,movie3)
+# movie4 <- read.csv("~/Desktop/movie20000_33394.csv")
+# movie0_33394 <- rbind(movie0_20000,movie4)
+# write.csv(movie0_33394, file = "Desktop/old_movie.csv")
+
+movie <- read.csv("~/Desktop/old_movie.csv")
+dim(movie)
+
+```
+
+```{r}
+#clean data
+# movie$title <- as.character(movie$title)
+# movie$title <- gsub("\\[.*","",movie$title) 
+# movie$title <- gsub("\\(.*","",movie$title)
+# movie$title <- gsub("\\~.*","",movie$title)
+# movie$title <- gsub("\\{.*","",movie$title)
+# movie$title <- gsub('[-]','',movie$title )
+# write.csv(movie, file = "Desktop/movie_data.csv")
+```
+
+```{r}
+# library(rvest)
+# ASIN.inq="B001TK80AW"
+# movie1<- read_html(paste("http://www.amazon.com/exec/obidos/ASIN/",ASIN.inq, sep=""))
+# 
+# movie1 %>% 
+#   html_node("title") %>%
+#   html_text()
+
+devtools::install_github("hrbrmstr/omdbapi")
+library(omdbapi)
+library(devtools)
+library(dplyr)
+library(pbapply)
+
+movie$Type <- "NA"
+movie$Year <- "NA" 
+movie$Director <- "NA"
+movie$countries <- "NA"
+
+n <- dim(movie)[1]
+
+for(i in 1:n){
+  print(i)
+  tryCatch({
+    title <- movie$title[i]
+    movie$Type[i] <- get_genres(find_by_title(title))[1]
+    movie$Year[i] <- unlist(find_by_title(title)[2],use.names = F)
+    movie$Director[i] <- get_directors(find_by_title(title))
+    movie$countries[i] <- get_countries(find_by_title(title))
+  }, error=function(e){})
+  }
+
+# search_by_title("Spectacular SpiderMan")
+# 
+# #find type
+# get_genres(find_by_title("Britney Spears"))[1]
+# 
+# #find directors
+# get_directors(find_by_title("Super 8"))
+# 
+# #find countries
+# get_countries(find_by_title("The Blind Swordsman: Zatoichi"))
+```
+
+```{r}
+#write.csv(movie, file = "Desktop/movieset.csv")
+movie <- read.csv("~/Desktop/movieset.csv")
+movie2 <- movie[complete.cases(movie), ]
+str(movie2)
+saveRDS(movie2, file="~/data.Rds")
+```
+
+##pie chart
+```{r}
+library(plotly)
+movie <- readRDS("~/Desktop/data.rds")
+movie <- movie[,c(2,4,6:9)]
+
+# plot_ly(movie, x = Type, type = "histogram", color = Type)
+# plot_ly(movie, x = countries, type = "histogram", color = countries)
+
+summary <- sort(summary(movie$Director),decreasing = T)
+A <- data.frame(Director = names(summary), number = summary)
+rownames(A) <- NULL
+A <- A[-c(1,2),]
+A <- A[c(1:20),]
+plot_ly(A, labels = Director, values = number, type = "pie") %>% 
+  layout(title = "Top Director")
+
+summary <- sort(summary(movie$Type),decreasing = T)
+B <- data.frame(Type = names(summary), number = summary)
+rownames(B) <- NULL
+B <- B[c(1:15),]
+plot_ly(B, labels = Type, values = number, type = "pie") %>% 
+  layout(title = "Top Movie Type")
+```
+
+#timeline setup
+```{r}
+library(dygraphs)
+movie$Year <- gsub("\\–.*","",movie$Year)
+summary <- summary(as.factor(movie$Year));summary
+ALL <- data.frame(year = names(summary), number = summary)
+ALL <- ALL[-nrow(ALL),]
+ALL$year <- strptime(ALL$year, "%Y")
+ALL$year <- as.POSIXct(ALL$year)
+ALL <- xts(ALL[,-1], order.by=ALL[,1])
+dygraph(ALL, main = "New Haven Temperatures", ylab = "Temp (F)")
+
+summary <- summary(as.factor(movie$Year[movie$Type == "Action"]))
+ACT <- data.frame(year = names(summary), number = summary)
+ACT$year <- strptime(ACT$year, "%Y")
+ACT$year <- as.POSIXct(ACT$year)
+ACT <- xts(ACT[,-1], order.by=ACT[,1])
+dygraph(ACT, main = "New Haven Temperatures", ylab = "Temp (F)") %>% dyRangeSelector()
+
+summary <- summary(as.factor(movie$Year[movie$Type == "Drama"]))
+Drama <- data.frame(year = names(summary), number = summary)
+Drama$year <- strptime(Drama$year, "%Y")
+Drama$year <- as.POSIXct(Drama$year)
+Drama <- xts(Drama[,-1], order.by=Drama[,1])
+dygraph(Drama, main = "New Haven Temperatures", ylab = "Temp (F)") %>% dyRangeSelector()
+
+summary <- summary(as.factor(movie$Year[movie$Type == "Comedy"]))
+Comedy <- data.frame(year = names(summary), number = summary)
+Comedy$year <- strptime(Comedy$year, "%Y")
+Comedy$year <- as.POSIXct(Comedy$year)
+Comedy <- xts(Comedy[,-1], order.by=Comedy[,1])
+dygraph(Comedy, main = "New Haven Temperatures", ylab = "Temp (F)") %>% dyRangeSelector()
+
+summary <- summary(as.factor(movie$Year[movie$Type == "Crime"]))
+Crime <- data.frame(year = names(summary), number = summary)
+Crime$year <- strptime(Crime$year, "%Y")
+Crime$year <- as.POSIXct(Crime$year)
+Crime <- xts(Crime[,-1], order.by=Crime[,1])
+dygraph(Crime, main = "New Haven Temperatures", ylab = "Temp (F)") %>% dyRangeSelector()
+
+summary <- summary(as.factor(movie$Year[movie$Type == "Horror"]))
+Horror <- data.frame(year = names(summary), number = summary)
+Horror$year <- strptime(Horror$year, "%Y")
+Horror$year <- as.POSIXct(Horror$year)
+Horror <- xts(Horror[,-1], order.by=Horror[,1])
+dygraph(Horror, main = "New Haven Temperatures", ylab = "Temp (F)") %>% dyRangeSelector()
+
+TYPE <- cbind(ALL,Comedy,ACT,Drama,Horror,Crime)
+colnames(TYPE) <- c("ALL","Comedy","ACT","Drama","Horror","Crime")
+saveRDS(TYPE, file="~/Desktop/TYPE.Rds")
+```
+
+```{r}
+search <- sort(summary(movie$Type[movie$Year =="2014"]),decreasing = T)
+search <- data.frame(names = names(search), search)
+rownames(search) <- NULL
+search <- search[1:15,]
+plot_ly(search, x = names, y = search, mode = "markers")
+```
+
+#clean score data
+```{r}
+#alldata <- read.csv("~/Desktop/data_50_10.csv")
+
+#most popular movie
+summary <- sort(table(alldata$product_productid),decreasing = T)
+summary <- summary[1:100]
+id <- data.frame(id_all = names(summary), summary = summary)
+
+#best movie
+summary <- sort(table(alldata$product_productid[alldata$review_score == 5]),decreasing = T)
+summary <- summary[1:100]
+id_5 <- data.frame(id_5 = names(summary), summary_5 = summary)
+
+#worst movie
+summary <- sort(table(alldata$product_productid[alldata$review_score == 1]),decreasing = T)
+summary <- summary[1:100]
+id_1 <- data.frame(id_1 = names(summary), summary_1 = summary)
+
+#top reviwer
+summary <- sort(table(alldata$review_userid),decreasing = T)
+summary <- summary[1:100]
+review <- data.frame(review = names(summary), n = summary)
+
+score <- cbind(id,id_5,id_1,review)
+rownames(score) <- NULL
+score[,1] <- as.character(score[,1])
+score[,3] <- as.character(score[,3])
+score[,5] <- as.character(score[,5])
+#saveRDS(score, file="~/Desktop/score.Rds")
+#write.csv(score, file="score.csv")
+
+score2 <- read.csv("~/Desktop/score2.csv")
+#saveRDS(score2, file="~/Desktop/score.Rds")
+score2 <- score2[,3:13]
+plot_ly(score2, x = summary, y = name, mode = "markers")
+```
+
