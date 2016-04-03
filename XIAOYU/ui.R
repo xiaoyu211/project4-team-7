@@ -55,7 +55,7 @@ shinyUI(navbarPage("Moives", theme = "style.css",
                                   tabPanel("Ranking", br(),
                                            plotlyOutput("case0", width="1000px",height="600px"),value = 0),
                                   
-                                  tabPanel("Ranking", br(),
+                                  tabPanel("Reviews", br(),
                                            plotlyOutput("case1", width="1000px",height="600px"),value = 1),
                                   
                                   tabPanel("Timeline",br(),
