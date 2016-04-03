@@ -27,7 +27,7 @@ shinyServer(function(input, output) {
       rownames(B) <- NULL
       B <- B[c(1:15),]
       plot_ly(B, labels = Type, values = number, type = "pie") %>% 
-        layout(title = "Top Movie Type")
+        layout(title = "Number of Movies by Type")
       
     }
     else {
@@ -38,7 +38,7 @@ shinyServer(function(input, output) {
       A <- A[-c(1,2),]
       A <- A[c(1:30),]
       plot_ly(A, labels = Director, values = number, type = "pie") %>% 
-        layout(title = "Top Director")
+        layout(title = "Number of Movies by Director")
       
     }
   })
