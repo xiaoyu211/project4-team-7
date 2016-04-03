@@ -15,7 +15,8 @@ TYPE <- readRDS("~/Desktop/TYPE.Rds")
 
 #shinyserver
 shinyServer(function(input, output) {
-    
+  
+#################### xiaoyu s Menu Item ####################
   ########pie chart
   output$case0 <- renderPlotly({
     
@@ -98,80 +99,5 @@ shinyServer(function(input, output) {
         layout(xaxis = list(title = "", tickfont = list(size = 11), tickangle = 20))
       
     })
-    # output$plot <- renderPlotly({
-    # 
-    #   if (input$status == 1) {
-    # 
-    #     x <- list(
-    #       showticklabels = F
-    #     )
-    # 
-    #     y <- list(
-    #       range = c(-2,12)
-    #     )
-    # 
-    #     plot_ly(C, x = Borough, y = Days, color = Borough, type = "box", boxmean = T) %>%
-    #       layout(xaxis = x, yaxis = y, title = "Resolution Time by Boroughs")
-    # 
-    #   }
-    # 
-    #   else {
-    # 
-    #     x <- list(
-    #       showticklabels = F
-    #     )
-    # 
-    #     z <- list(
-    #       range = c(-5,55)
-    #     )
-    # 
-    #     plot_ly(C, x = Complaint.Type, y = Days, color = Complaint.Type, type = "box", boxmean = T) %>%
-    #       layout(xaxis = x, yaxis = z, title = "Resolution Time by Boroughs")
-    #   }
-    # 
-    # })
-    # 
-    # 
-    # output$view <- renderTable({
-    #   
-    #   summary <- data.frame(tapply(
-    #     A$Days[A$Status == "Closed"], list(A$Complaint.Type[A$Status == "Closed"], 
-    #                                        A$Borough[A$Status == "Closed"]), mean, na.rm=TRUE))
-    #   head(summary, n = 8)
-    #   
-    # })
-    # 
-    # 
-    # 
-    # output$case3 <- renderPlotly({  
-    #   
-    #   if(input$cases == 1) {
-    #     
-    #     Type <- data.frame(summary(A$Complaint.Type[A$Status == "Open"]))
-    #     value <- c(Type[,1])
-    #     name <- c(rownames(Type))
-    #     plot_ly(values = value, labels = c(name),type="pie", showlegend = F) %>% 
-    #       layout(title = "Open cases by Complaint.Type") 
-    #     
-    #   }
-    #   else{
-    #     
-    #     Type <- data.frame(summary(A$Complaint.Type[A$Status == "Closed"]))
-    #     value <- c(Type[,1])
-    #     name <- c(rownames(Type))
-    #     plot_ly(values = value, labels = c(name),type="pie" ,showlegend = F) %>% 
-    #       layout(title = "Closed cases by Complaint.Type") 
-    #     
-    #   } 
-    #   
-    # })
-    # 
-    # output$map <- renderLeaflet({
-    #   
-    #   leaflet(na.omit(A)) %>% addTiles() %>% addProviderTiles("CartoDB.Positron") %>% 
-    #     setView(lng = -73.9857, lat = 40.7577, zoom = 11) %>% 
-    #     addCircleMarkers(radius=6, fillOpacity = 0.5, popup = paste(A$Days),
-    #                      clusterOptions = markerClusterOptions())
-    #   
-    # })
+  #################### end of  xiaoyu s Menu Item ####################  
   })
