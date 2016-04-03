@@ -49,14 +49,16 @@ shinyServer(function(input, output) {
     if(input$review == 1){
       
       plot_ly(score, x = name, y = summary,  size = summary, color = summary ,mode = "markers")%>%
-        layout(xaxis = list(title = "", tickfont = list(size = 7), tickangle = 30))
+        layout(xaxis = list(title = "", tickfont = list(size = 7), tickangle = 30), 
+               yaxis = list(title = "The total number of reviews"),title = "The Most Popular Movies")
     
       }
     
     else{
     
       plot_ly(score, x = review, y = n, size = n, color = n, mode = "markers") %>%
-        layout(xaxis = list(title = "", tickfont = list(size = 7), tickangle = 30))
+        layout(xaxis = list(title = "", tickfont = list(size = 7), tickangle = 30),
+               yaxis = list(title = "The total number of reviews"),title = "The Most Active Users")
     
       }
     
@@ -96,7 +98,8 @@ shinyServer(function(input, output) {
       search <- search[1:15,]
       
       plot_ly(search, x = names, y = search, size = search, color = search, mode = "markers") %>%
-        layout(xaxis = list(title = "", tickfont = list(size = 11), tickangle = 20))
+        layout(xaxis = list(title = "", tickfont = list(size = 11), tickangle = 20),
+               yaxis = list(title = "The total number of movies"))
       
     })
   #################### end of  xiaoyu s Menu Item ####################  

@@ -21,8 +21,8 @@ shinyUI(navbarPage("Moives", theme = "style.css",
                           
                           conditionalPanel(condition = "input.conditionedPanels == 1",
                                            selectInput("review", "Customer Reviews:",
-                                                       choices = list( "Most popular movie" = 1,
-                                                                       "Most Active User" = 2), selected = 1)),
+                                                       choices = list( "Most popular movies" = 1,
+                                                                       "Most Active Users" = 2), selected = 1)),
                           
                           conditionalPanel(condition = "input.conditionedPanels == 2 ",
                                            selectInput("time", "Timeline by MovieType:", 
