@@ -91,7 +91,8 @@ shinyServer(function(input, output) {
                      "3" = TYPE[,3],
                      "4" = TYPE[,4],
                      "5" = TYPE[,5],
-                     "6" = TYPE[,6])
+                     "6" = TYPE[,6],
+                     "7" = TYPE[,7])
       
       data2 <- switch(input$compare, 
                       "1" = NULL,
@@ -99,7 +100,8 @@ shinyServer(function(input, output) {
                       "3" = TYPE[,3],
                       "4" = TYPE[,4],
                       "5" = TYPE[,5],
-                      "6" = TYPE[,6])
+                      "6" = TYPE[,6],
+                      "7" = TYPE[,7])
       
       data3 <- cbind(data,data2)
       name <- paste(names(data),"    ", names(data2))
