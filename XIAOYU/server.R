@@ -11,6 +11,7 @@ library(leaflet)
 movie <- readRDS("~/Desktop/data.rds")
 score <- readRDS("~/Desktop/score.rds")
 TYPE <- readRDS("~/Desktop/TYPE.Rds")
+Final <- readRDS("~/Desktop/Final.Rds")
 
 #shinyserver
 shinyServer(function(input, output) {
@@ -40,17 +41,18 @@ shinyServer(function(input, output) {
         layout(title = "Number of Movies by Director")
       
     }
+    
   })
   
   #########review
-  output$case1 <- renderPlotly({
+  output$reveiw0 <- renderPlotly({
     
     if(input$review == 1){
       
       plot_ly(score, x = title.y, y = summary, color = summary, size = summary, mode = "markers")%>%
         layout(xaxis = list(title = "", tickfont = list(size = 7), tickangle = 30), 
                yaxis = list(title = "The total number of reviews"),title = "Top 50 Movies")
-      
+    
       }
     
     else{
@@ -63,7 +65,25 @@ shinyServer(function(input, output) {
     
     })
   
-  #########Timeline
+  output$reveiw1 <- renderPlotly({
+    
+    if(input$more == 1){
+      plot_ly(Final, x = Type, y = summary, mode = "markers",color = summary) %>%
+        layout(xaxis = list(title = "", tickfont = list(size = 12), tickangle = 30),
+               title = "Overall Ranking")
+    }
+    
+    else {
+      plot_ly(Final, x = Type,  y = summary, type = "box")  %>%
+        layout(xaxis = list(title = "", tickfont = list(size = 12), tickangle = 30),
+               title = "Summary")
+      
+      }
+    
+    })
+  
+
+  ############Timeline############
     output$dygraph <- renderDygraph({
       data <- switch(input$time, 
                      "1" = TYPE[,1],
