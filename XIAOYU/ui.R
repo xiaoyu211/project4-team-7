@@ -28,18 +28,20 @@ shinyUI(navbarPage("Moives", theme = "style.css",
                                            selectInput("time", "Timeline by MovieType:", 
                                                        choices = list("All Types" = 1,
                                                                       "Comedy " = 2,
-                                                                      "Action" = 3,
-                                                                      "Drama" = 4,
-                                                                      "Horror&Thriller" = 5,
-                                                                      "Crime" = 6),selected = 1),
+                                                                      "Animation" = 3,
+                                                                      "Action" = 4,
+                                                                      "Drama" = 5,
+                                                                      "Horror&Thriller" = 6,
+                                                                      "Crime" = 7),selected = 1),
                                            
                                            selectInput("compare", "Between-Types Comparison:", 
                                                        choices = list("NONE" = 1,
                                                                       "Comedy " = 2, 
-                                                                      "Action" = 3,
-                                                                      "Drama" = 4,
-                                                                      "Horror&Thriller" = 5,
-                                                                      "Crime" = 6),selected = 1),
+                                                                      "Animation" = 3,
+                                                                      "Action" = 4,
+                                                                      "Drama" = 5,
+                                                                      "Horror&Thriller" = 6,
+                                                                      "Crime" = 7),selected = 1),
                           
                                            textInput("text", label = h5("Input Year"), value = ""))
                           
@@ -53,14 +55,14 @@ shinyUI(navbarPage("Moives", theme = "style.css",
       
             mainPanel(tabsetPanel(id = "conditionedPanels",type="pill",
                                   tabPanel("Ranking", br(),
-                                           plotlyOutput("case0", width="1000px",height="600px"),value = 0),
+                                           plotlyOutput("case0", width="900px",height="500px"),value = 0),
                                   
                                   tabPanel("Reviews", br(),
-                                           plotlyOutput("case1", width="1000px",height="600px"),value = 1),
-                                  
+                                           plotlyOutput("case1", width="900px",height="500px"),value = 1),
+                                            
                                   tabPanel("Timeline",br(),
-                                           dygraphOutput("dygraph", width="1000px",height="300px"),
-                                           plotlyOutput("case3", width="1000px",height="300px"),value = 2)
+                                           dygraphOutput("dygraph", width="900px",height="300px"),
+                                           plotlyOutput("case3", width="900px",height="300px"),value = 2)
                                                
                                                 
       ))))),

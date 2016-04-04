@@ -47,17 +47,17 @@ shinyServer(function(input, output) {
     
     if(input$review == 1){
       
-      plot_ly(score, x = name, y = summary,  size = summary, color = summary ,mode = "markers")%>%
+      plot_ly(score, x = title.y, y = summary, color = summary, size = summary, mode = "markers")%>%
         layout(xaxis = list(title = "", tickfont = list(size = 7), tickangle = 30), 
-               yaxis = list(title = "The total number of reviews"),title = "The Most Popular Movies")
-    
+               yaxis = list(title = "The total number of reviews"),title = "Top 50 Movies")
+      
       }
     
     else{
     
       plot_ly(score, x = review, y = n, size = n, color = n, mode = "markers") %>%
         layout(xaxis = list(title = "", tickfont = list(size = 7), tickangle = 30),
-               yaxis = list(title = "The total number of reviews"),title = "The Most Active Users")
+               yaxis = list(title = "The total number of reviews"),title = "Top 50 Active Users")
     
       }
     
