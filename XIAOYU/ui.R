@@ -30,7 +30,7 @@ shinyUI(navbarPage("Moives", theme = "style.css",
                                                                       "Comedy " = 2,
                                                                       "Action" = 3,
                                                                       "Drama" = 4,
-                                                                      "Horror" = 5,
+                                                                      "Horror&Thriller" = 5,
                                                                       "Crime" = 6),selected = 1),
                                            
                                            selectInput("compare", "Between-Types Comparison:", 
@@ -38,7 +38,7 @@ shinyUI(navbarPage("Moives", theme = "style.css",
                                                                       "Comedy " = 2, 
                                                                       "Action" = 3,
                                                                       "Drama" = 4,
-                                                                      "Horror" = 5,
+                                                                      "Horror&Thriller" = 5,
                                                                       "Crime" = 6),selected = 1),
                           
                                            textInput("text", label = h5("Input Year"), value = ""))
