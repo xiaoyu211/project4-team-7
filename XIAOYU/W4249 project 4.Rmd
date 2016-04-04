@@ -75,18 +75,20 @@ for(i in 1:n){
 
 ```{r}
 #write.csv(movie, file = "Desktop/movieset.csv")
-movie <- read.csv("~/Desktop/movieset.csv")
-movie2 <- movie[complete.cases(movie), ]
-str(movie2)
-saveRDS(movie2, file="~/data.Rds")
+# movie <- read.csv("~/Desktop/movieset.csv")
+# movie2 <- movie[complete.cases(movie), ]
+# str(movie2)
+# saveRDS(movie2, file="~/data.Rds")
 ```
 
 ##pie chart
 ```{r}
 library(plotly)
-movie <- readRDS("~/Desktop/data.rds")
-movie <- movie[,c(2,4,6:9)]
-
+library(ggplot2)
+library(dygraphs)
+library(xts)
+# movie <- movie[,c(2,4,6:9)]
+# movie$Year <- gsub("\\–.*","",movie$Year))
 # plot_ly(movie, x = Type, type = "histogram", color = Type)
 # plot_ly(movie, x = countries, type = "histogram", color = countries)
 
@@ -108,53 +110,61 @@ plot_ly(B, labels = Type, values = number, type = "pie") %>%
 
 #timeline setup
 ```{r}
-library(dygraphs)
-movie$Year <- gsub("\\–.*","",movie$Year)
+movie <- readRDS("~/Desktop/data.rds")
+
 summary <- summary(as.factor(movie$Year));summary
 ALL <- data.frame(year = names(summary), number = summary)
 ALL <- ALL[-nrow(ALL),]
-ALL$year <- strptime(ALL$year, "%Y")
-ALL$year <- as.POSIXct(ALL$year)
+ALL$year <- as.Date(paste(ALL$year, "01", "01", sep=""), "%Y%m%d")
+ALL$year <- as.POSIXlt(ALL$year)
 ALL <- xts(ALL[,-1], order.by=ALL[,1])
-dygraph(ALL, main = "New Haven Temperatures", ylab = "Temp (F)")
+
+#dygraph(ALL, main = "New Haven Temperatures", ylab = "Temp (F)")
 
 summary <- summary(as.factor(movie$Year[movie$Type == "Action"]))
 ACT <- data.frame(year = names(summary), number = summary)
-ACT$year <- strptime(ACT$year, "%Y")
-ACT$year <- as.POSIXct(ACT$year)
+ACT$year <- as.Date(paste(ACT$year, "01", "01", sep=""), "%Y%m%d")
+ACT$year <- as.POSIXlt(ACT$year)
 ACT <- xts(ACT[,-1], order.by=ACT[,1])
-dygraph(ACT, main = "New Haven Temperatures", ylab = "Temp (F)") %>% dyRangeSelector()
+#dygraph(ACT, main = "New Haven Temperatures", ylab = "Temp (F)") %>% dyRangeSelector()
 
 summary <- summary(as.factor(movie$Year[movie$Type == "Drama"]))
 Drama <- data.frame(year = names(summary), number = summary)
-Drama$year <- strptime(Drama$year, "%Y")
-Drama$year <- as.POSIXct(Drama$year)
+Drama$year <- as.Date(paste(Drama$year, "01", "01", sep=""), "%Y%m%d")
+Drama$year <- as.POSIXlt(Drama$year)
 Drama <- xts(Drama[,-1], order.by=Drama[,1])
-dygraph(Drama, main = "New Haven Temperatures", ylab = "Temp (F)") %>% dyRangeSelector()
+#dygraph(Drama, main = "New Haven Temperatures", ylab = "Temp (F)") %>% dyRangeSelector()
 
 summary <- summary(as.factor(movie$Year[movie$Type == "Comedy"]))
 Comedy <- data.frame(year = names(summary), number = summary)
-Comedy$year <- strptime(Comedy$year, "%Y")
-Comedy$year <- as.POSIXct(Comedy$year)
+Comedy$year <- as.Date(paste(Comedy$year, "01", "01", sep=""), "%Y%m%d")
+Comedy$year <- as.POSIXlt(Comedy$year)
 Comedy <- xts(Comedy[,-1], order.by=Comedy[,1])
-dygraph(Comedy, main = "New Haven Temperatures", ylab = "Temp (F)") %>% dyRangeSelector()
+#dygraph(Comedy, main = "New Haven Temperatures", ylab = "Temp (F)") %>% dyRangeSelector()
+
+summary <- summary(as.factor(movie$Year[movie$Type == "Horror" | movie$Type == "Thriller"]))
+Horror <- data.frame(year = names(summary), number = summary)
+Horror$year <- as.Date(paste(Horror$year, "01", "01", sep=""), "%Y%m%d")
+Horror$year <- as.POSIXlt(Horror$year)
+Horror <- xts(Horror[,-1], order.by=Horror[,1])
+#dygraph(Horror, main = "New Haven Temperatures", ylab = "Temp (F)") %>% dyRangeSelector()
 
 summary <- summary(as.factor(movie$Year[movie$Type == "Crime"]))
 Crime <- data.frame(year = names(summary), number = summary)
-Crime$year <- strptime(Crime$year, "%Y")
-Crime$year <- as.POSIXct(Crime$year)
+Crime$year <- as.Date(paste(Crime$year, "01", "01", sep=""), "%Y%m%d")
+Crime$year <- as.POSIXlt(Crime$year)
 Crime <- xts(Crime[,-1], order.by=Crime[,1])
-dygraph(Crime, main = "New Haven Temperatures", ylab = "Temp (F)") %>% dyRangeSelector()
+#dygraph(Crime, main = "New Haven Temperatures", ylab = "Temp (F)") %>% dyRangeSelector()
 
-summary <- summary(as.factor(movie$Year[movie$Type == "Horror"]))
-Horror <- data.frame(year = names(summary), number = summary)
-Horror$year <- strptime(Horror$year, "%Y")
-Horror$year <- as.POSIXct(Horror$year)
-Horror <- xts(Horror[,-1], order.by=Horror[,1])
-dygraph(Horror, main = "New Haven Temperatures", ylab = "Temp (F)") %>% dyRangeSelector()
+summary <- summary(as.factor(movie$Year[movie$Type == "Animation"]))
+Animation <- data.frame(year = names(summary), number = summary)
+Animation$year <- as.Date(paste(Animation$year, "01", "01", sep=""), "%Y%m%d")
+Animation$year <- as.POSIXlt(Animation$year)
+Animation <- xts(Animation[,-1], order.by=Animation[,1])
+#dygraph(Crime, main = "New Haven Temperatures", ylab = "Temp (F)") %>% dyRangeSelector()
 
-TYPE <- cbind(ALL,Comedy,ACT,Drama,Horror,Crime)
-colnames(TYPE) <- c("ALL","Comedy","ACT","Drama","Horror","Crime")
+TYPE <- cbind(ALL,Comedy,Animation,ACT,Drama,Horror,Crime)
+colnames(TYPE) <- c("ALL","Comedy","Animation","Action","Drama","Horror&Thriller","Crime")
 saveRDS(TYPE, file="~/Desktop/TYPE.Rds")
 ```
 
@@ -198,9 +208,40 @@ score[,5] <- as.character(score[,5])
 #saveRDS(score, file="~/Desktop/score.Rds")
 #write.csv(score, file="score.csv")
 
-score2 <- read.csv("~/Desktop/score2.csv")
+score <- readRDS("~/Desktop/score.Rds")
 #saveRDS(score2, file="~/Desktop/score.Rds")
 score2 <- score2[,3:13]
 plot_ly(score2, x = summary, y = name, mode = "markers")
+```
+
+
+```{r}
+# alldata <- read.csv("~/Desktop/data_50_10.csv")
+# movie <- read.csv("~/Desktop/old_movie.csv")
+# movie <- movie[,c(4,6,7)]
+# movie2 <- readRDS("~/Desktop/data.Rds")
+# movie3 <- merge(movie2,movie,by = "product_productid", all.x=TRUE)
+# movie3 <- movie3[,-2]
+# 
+# summary <- sort(table(alldata$product_productid),decreasing = T)
+# ID <- data.frame(product_productid = names(summary), summary = summary)
+# ID2 <- ID[!duplicated(ID$summary),]
+# rownames(ID2) <- NULL
+# M <- merge(ID2,movie3, by = "product_productid", all.x=TRUE)
+# G <- M[order(M$summary,decreasing = T),]
+# 
+# Final <- G[complete.cases(G$Type), ]
+# saveRDS(Final, file="~/Desktop/Final.Rds")
+
+Final <- readRDS("~/Desktop/Final.Rds")
+Final <- Final[1:100,]
+rownames(Final) <- NULL
+
+score <- readRDS("~/Desktop/score.Rds")
+score <- score[,c(7,8)]
+score <- cbind(Final,score)
+score <- score[c(1:50),]
+saveRDS(score, file="~/Desktop/score.Rds")
+
 ```
 
