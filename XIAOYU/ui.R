@@ -17,12 +17,17 @@ shinyUI(navbarPage("Moives", theme = "style.css",
                           conditionalPanel(condition = "input.conditionedPanels == 0",
                                            selectInput("rank", "Rank Status:",
                                                        choices = list( "Rank by Movie Type" = 1, 
-                                                                       "Rand by Director" = 2), selected = 1)),
+                                                                       "Rank by Director" = 2), selected = 1)),
                           
                           conditionalPanel(condition = "input.conditionedPanels == 1",
                                            selectInput("review", "Customer Reviews:",
-                                                       choices = list( "Most popular movies" = 1,
-                                                                       "Most Active Users" = 2), selected = 1)),
+                                                       choices = list( "Most Popular movies" = 1,
+                                                                       "Most Active Users" = 2), selected = 1),
+                                           
+                                           selectInput("more", "More Details:",
+                                                       choices = list("Overall Ranking" = 1,
+                                                                      "Summary by Movie Type" = 2), selected = 1)
+                                           ),
                           
                           conditionalPanel(condition = "input.conditionedPanels == 2 ",
                                            selectInput("time", "Timeline by MovieType:", 
@@ -55,10 +60,11 @@ shinyUI(navbarPage("Moives", theme = "style.css",
       
             mainPanel(tabsetPanel(id = "conditionedPanels",type="pill",
                                   tabPanel("Ranking", br(),
-                                           plotlyOutput("case0", width="900px",height="500px"),value = 0),
+                                           plotlyOutput("case0", width="900px",height="600px"),value = 0),
                                   
-                                  tabPanel("Reviews", br(),
-                                           plotlyOutput("case1", width="900px",height="500px"),value = 1),
+                                  tabPanel("Popularity", br(),
+                                           plotlyOutput("reveiw0", width="900px",height="300px"),
+                                           plotlyOutput("reveiw1", width="900px",height="300px"),value = 1),
                                             
                                   tabPanel("Timeline",br(),
                                            dygraphOutput("dygraph", width="900px",height="300px"),
