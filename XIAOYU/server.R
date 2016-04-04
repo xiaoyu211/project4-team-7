@@ -10,7 +10,6 @@ library(leaflet)
 ##
 movie <- readRDS("~/Desktop/data.rds")
 score <- readRDS("~/Desktop/score.rds")
-movie <- movie[,c(2,4,6:9)]
 TYPE <- readRDS("~/Desktop/TYPE.Rds")
 
 #shinyserver
