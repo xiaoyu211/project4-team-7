@@ -12,12 +12,15 @@ movie <- readRDS("~/Desktop/data.rds")
 score <- readRDS("~/Desktop/score.rds")
 TYPE <- readRDS("~/Desktop/TYPE.Rds")
 Final <- readRDS("~/Desktop/Final.Rds")
+time <- readRDS("~/Desktop/time.Rds")
 
 #shinyserver
 shinyServer(function(input, output) {
   
 #################### xiaoyu s Menu Item ####################
-  ########pie chart
+  
+  ######## Section one  ########
+  #pie chart
   output$case0 <- renderPlotly({
     
     if(input$rank == 1) {
@@ -44,7 +47,7 @@ shinyServer(function(input, output) {
     
   })
   
-  #########review
+  ######## Section two  ########
   output$reveiw0 <- renderPlotly({
     
     if(input$review == 1){
@@ -82,8 +85,34 @@ shinyServer(function(input, output) {
     
     })
   
+  #input product id
+  output$reveiw2 <- renderDygraph({
+    
+    text <- input$text_id
 
-  ############Timeline############
+    if(text != ""){
+      sub <-  time[time$product_productid == text,]
+      sub <- sub[order(sub$newtime),]
+      
+      mean <- c()
+    
+      for (i in 1: dim(sub)[1]){
+      
+      mean[i] <- mean(sub[1:i,3])
+      
+      }
+    
+      sub <- cbind(sub,mean)
+      data <- xts(sub[,-4], order.by = sub[,4])
+      name = paste("Average Score of ",sub[1,7])
+      
+      dygraph(data[,7], main = name, ylab = "Average Score") %>% dyRangeSelector() %>%  dyOptions(stackedGraph = TRUE)
+    }
+  
+    })
+  
+  
+  ######## Section three  ########
     output$dygraph <- renderDygraph({
       data <- switch(input$time, 
                      "1" = TYPE[,1],
@@ -105,14 +134,14 @@ shinyServer(function(input, output) {
       
       data3 <- cbind(data,data2)
       name <- paste(names(data),"    ", names(data2))
-      dygraph(data3, main = "Between-Types Comparison") %>% dyRangeSelector()
+      dygraph(data3, main = "Between-Types Comparison") %>% dyRangeSelector() 
       
     })
     
     #input timeline
     output$case3 <- renderPlotly({
       
-      text <- input$text
+      text <- input$text_year
       search <- sort(summary(movie$Type[movie$Year == text]),decreasing = T)
       search <- data.frame(names = names(search), search)
       rownames(search) <- NULL

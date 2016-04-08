@@ -10,26 +10,30 @@ library(leaflet)
 shinyUI(navbarPage("Moives", theme = "style.css",
       
  #################### xiaoyu s Menu Item ####################
-  tabPanel("Timelines",column(7, 
-           sidebarLayout(                          
-                         sidebarPanel(
-                          
-                          conditionalPanel(condition = "input.conditionedPanels == 0",
+  tabPanel("Timelines",
+           sidebarLayout(position="left",
+             sidebarPanel(width = 2,
+                        
+                        conditionalPanel(condition = "input.conditionedPanels == 0",
                                            selectInput("rank", "Rank Status:",
                                                        choices = list( "Rank by Movie Type" = 1, 
-                                                                       "Rank by Director" = 2), selected = 1)),
+                                                                       "Rank by Director" = 2), selected = 1)
+                                         ),
                           
-                          conditionalPanel(condition = "input.conditionedPanels == 1",
+                        conditionalPanel(condition = "input.conditionedPanels == 1",
                                            selectInput("review", "Customer Reviews:",
                                                        choices = list( "Most Popular movies" = 1,
                                                                        "Most Active Users" = 2), selected = 1),
                                            
                                            selectInput("more", "More Details:",
                                                        choices = list("Overall Ranking" = 1,
-                                                                      "Summary by Movie Type" = 2), selected = 1)
-                                           ),
+                                                                      "Summary by Movie Type" = 2), selected = 1),
+                                           
+                                           textInput("text_id", label = h5("Input Product ID"), value = "")
+
+                                         ),
                           
-                          conditionalPanel(condition = "input.conditionedPanels == 2 ",
+                        conditionalPanel(condition = "input.conditionedPanels == 2 ",
                                            selectInput("time", "Timeline by MovieType:", 
                                                        choices = list("All Types" = 1,
                                                                       "Comedy " = 2,
@@ -48,30 +52,28 @@ shinyUI(navbarPage("Moives", theme = "style.css",
                                                                       "Horror&Thriller" = 6,
                                                                       "Crime" = 7),selected = 1),
                           
-                                           textInput("text", label = h5("Input Year"), value = ""))
-                          
-                          # conditionalPanel(condition = "input.conditionedPanels == 3",
-                          #                  selectInput("status", "Time Spent:", 
-                          #                              choices = list("By Boroughs" = 1,
-                          #                                             "By ComplaintType" = 2), selected = 1))
+                                           textInput("text_year", label = h5("Input Year"), value = ""))
                           
                           
-             ),
-      
-            mainPanel(tabsetPanel(id = "conditionedPanels",type="pill",
-                                  tabPanel("Ranking", br(),
+                      ),
+           
+              mainPanel(width = 10,tabsetPanel(id = "conditionedPanels", type="pill",
+                                  tabPanel("Ranking",br(),
                                            plotlyOutput("case0", width="900px",height="600px"),value = 0),
                                   
-                                  tabPanel("Popularity", br(),
-                                           plotlyOutput("reveiw0", width="900px",height="300px"),
-                                           plotlyOutput("reveiw1", width="900px",height="300px"),value = 1),
+                                  tabPanel("Popularity",br(),
+                                           fluidRow(
+                                             column(6,plotlyOutput("reveiw0", width="550px",height="300px")),
+                                             column(6,plotlyOutput("reveiw1", width="550px",height="300px")),
+                                             column(12,dygraphOutput("reveiw2", width="900px",height="300px"))),value = 1),
                                             
                                   tabPanel("Timeline",br(),
-                                           dygraphOutput("dygraph", width="900px",height="300px"),
-                                           plotlyOutput("case3", width="900px",height="300px"),value = 2)
+                                           fluidRow(
+                                             dygraphOutput("dygraph", width="900px",height="300px"),
+                                             plotlyOutput("case3", width="1000px",height="300px")),value = 2)
                                                
-                                                
-      ))))),
+                                            ))
+    )),
  #################### end of  xiaoyu s Menu Item ####################  
   
  
