@@ -13,10 +13,10 @@ score <- readRDS("~/Desktop/score.rds")
 TYPE <- readRDS("~/Desktop/TYPE.Rds")
 Final <- readRDS("~/Desktop/Final.Rds")
 time <- readRDS("~/Desktop/time.Rds")
+data2d <- readRDS("~/Desktop/2ddata.Rds")
 
 #shinyserver
 shinyServer(function(input, output) {
-  
 #################### xiaoyu s Menu Item ####################
   
   ######## Section one  ########
@@ -152,5 +152,25 @@ shinyServer(function(input, output) {
                yaxis = list(title = "The total number of movies"))
       
     })
-  #################### end of  xiaoyu s Menu Item ####################  
+  #################### end of  xiaoyu s Menu Item #################### 
+    
+  #####################Similarity######################################
+    output$recommap<-renderPlotly({
+      plot_ly(x=data2d$x1,y=data2d$x2,text=data2d$title.y,
+                                   color=data2d$recommendation,
+                                   colors=c("coral","black"),
+                                   size=as.numeric(data2d$recommendation),
+                                   mode="markers")
+    })
+    
+    output$gmap<-renderPlotly({
+      plot_ly(x=data2d$x1,y=data2d$x2,text=data2d$title.y,
+              color=data2d$Year,
+              size=as.numeric(data2d$recommendation),
+              mode="markers")
+    })
+    
+    
+    
+  #######################################################################    
   })

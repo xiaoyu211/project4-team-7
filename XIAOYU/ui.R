@@ -6,14 +6,44 @@ require(lubridate)
 library(dygraphs)
 library(xts)
 library(leaflet)
+library(shinydashboard)
 
-shinyUI(navbarPage("Moives", theme = "style.css",
-      
+shinyUI( fluidPage(
+          navbarPage("Amazon Movie Reviews",
+          theme = "bootstrap3.css",
+###################overview part###########################          
+          tabPanel("Overview",
+              box(width=6,
+                       img(src="movie2.jpg", width = 400)   
+                   ),     
+              box(width=6,
+                  h5("Analysis of Amazon movie review",align="center"),
+                  hr(),
+                  p("We focus on the analysis of amazon movie reviews. The date sets contains 110000 reviews of 409 movies on the Amazon.
+                    The analysis mainly develops into three parts. First we summrize the top popular movies and then we explore the time trend. Finally we compute the similarity 
+                    of the movies based on the review scosres."),
+                  p("Data Source:",
+                    a(href = 'http://snap.stanford.edu/data/web-Movies.html', 'Amazon movie review'),
+                    br(),"Repo here: ",
+                    a(href = "https://github.com/TZstatsADS/project4-team-7", icon("github")),
+                    br(),
+                    "Copyright 2016 By",
+                    span("STAT4249 Project4 Group 7", style = "color:blue"))  
+                  )
+                  ),
+
+ ############################################################         
+
+
+
+
+
+
+
  #################### xiaoyu s Menu Item ####################
   tabPanel("Timelines",
            sidebarLayout(position="left",
              sidebarPanel(width = 2,
-                        
                         conditionalPanel(condition = "input.conditionedPanels == 0",
                                            selectInput("rank", "Rank Status:",
                                                        choices = list( "Rank by Movie Type" = 1, 
@@ -78,11 +108,43 @@ shinyUI(navbarPage("Moives", theme = "style.css",
   
  
  #################### ---- 's Menu Item ####################
-    tabPanel("TYPE TWO"
-    )
+ navbarMenu("Similarity",
+            tabPanel("Recommendation analysis",
+              plotlyOutput("recommap")
+            ),
+            tabPanel("Factor analysis",
+              plotlyOutput("gmap")
+            )
+ ),
  #################### end of ---- Menu Item  ####################
- 
- ))
+
+
+
+
+
+
+
+
+###################About us #############################
+tabPanel("About us",
+         tabItem(
+      tabName = "about",
+        box(width = 12,
+      h3(icon("group"),"Contact information"),
+      hr(),
+      #title = "Team Members", status = "primary", solidHeader = TRUE, collapsible = TRUE, width = 12,
+      column(width = 6,
+             p("Ho, Eric Ming-Yin: emh2213@columbia.edu"),
+             p("Liu, Mengying: ml3810@columbia.edu"),
+             p("Shi, Ruixiong: rs3569@columbia.edu"),
+             p("Wang, Xiaoyu: xw2419@columbia.edu"),
+             p("Zhao, Yuan: yz2885@columbia.edu"))
+
+)))
+
+##########################End##################################
+
+ )))
 
 
 
